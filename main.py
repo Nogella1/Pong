@@ -2,14 +2,19 @@
 # https://www.youtube.com/watch?v=C6jJg9Zan7w&ab_channel=freeCodeCamp.org
 # C:\Users\legon\AppData\Local\Programs\Python\Python310\python.exe
 
-import time
+import time # time functions
 import turtle  # simple graphics / game engine
+import winsound     # to play sounds
 
 frame_time = 0.02   # 50 frames per second
 
 # scores
 left = 0
 right = 0
+
+#sounds
+#winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+#winsound.PlaySound("ding.wav", winsound.SND_ASYNC)
 
 # set up the screen
 wn = turtle.Screen()   # a window for the game
@@ -18,6 +23,15 @@ wn.bgcolor("white")  # black white pink all OK
 wn.setup(width=800, height=600)  # size of window  0,0 is at the centre
 wn.tracer(0)  # stops screen updating itself
 
+# set up the pen
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("black")
+pen.penup()
+pen.hideturtle()
+pen.goto(0,260)
+pen.clear()
+pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "normal"))
 
 # Left Paddle pad_L
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
