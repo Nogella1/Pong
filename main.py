@@ -1,17 +1,23 @@
 
 # https://www.youtube.com/watch?v=C6jJg9Zan7w&ab_channel=freeCodeCamp.org
 # C:\Users\legon\AppData\Local\Programs\Python\Python310\python.exe
+
 import time
 import turtle  # simple graphics / game engine
 
+frame_time = 0.02   # 50 frames per second
+
+# scores
 left = 0
 right = 0
 
+# set up the screen
 wn = turtle.Screen()   # a window for the game
 wn.title("PONG Game")
 wn.bgcolor("white")  # black white pink all OK
 wn.setup(width=800, height=600)  # size of window  0,0 is at the centre
 wn.tracer(0)  # stops screen updating itself
+
 
 # Left Paddle pad_L
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
@@ -41,7 +47,7 @@ ball.goto(0, 0)  # mid screen at the left hand side
 ball.dx = 3     # ball x-movement each frame
 ball.dy = 3     # ball y-movement each frame
 
-# FUNCTIONS
+# Paddle Functions
 def upL():
     y = pad_L.ycor()
     y += 20
@@ -62,63 +68,81 @@ def downR():
     y -= 20
     pad_R.sety(y)
 
+def quit_game():
+    pad_R.sety(400)
+
 # Keyboard binding
 wn.listen()
 wn.onkeypress(upL, "w")
 wn.onkeypress(downL, "s")
 wn.onkeypress(upR, "Up")
 wn.onkeypress(downR, "Down")
+wn.onkeypress(quit_game, "q")
 
-delay = False
+delay = True
+frame = 0
+start = time.time() # number of seconds at start of game  ***********
 
 # Main game loop
 while True:         # loop until we tell it to stop
-    wn.update()    # we control when it updates
-    if delay:
-        time.sleep(0.5)
-        delay = False
+    now = time.time()
+    frame = now - start
 
-    ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
-    ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
-
-    # Border checking
-    if ball.ycor() > 290:
-        ball.sety(290)
-        ball.dy *= -1
-        ball.dy *= 1.1
-        ball.dx *= 1.1
-    elif ball.ycor() < -290:
-        ball.sety(-290)
-        ball.dy *= -1
-        ball.dy *= 1.1
-        ball.dx *= 1.1
-
-    if ball.xcor()> 390 or ball.xcor()< -390:
-        if ball.xcor() > 390:
-            left += 1
-        else:
-            right += 1
-        print (str(left) + '   ' + str(right))
-        if left > 4 or right > 4:
+    if frame > 0.02:
+        start = now
+        wn.update()    # we control when it updates
+        if delay:
+            time.sleep(0.5)
+            delay = False
+            start = time.time()
+        if pad_R.ycor()>350:
             quit()
-        ball.goto(0,0)
-        ball.dx *= -1
-        if ball.dx > 0:
-            ball.dx = 3
-        else:
-            ball.dx = -3
-        if ball.dy > 0:
-            ball.dy = 3
-        else:
-            ball.dy = -3
+        ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
+        ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
 
-        delay = True
+        # Top Border checking
+        if ball.ycor() > 290:
+            ball.sety(290)
+            ball.dy *= -1
+            ball.dy *= 1.1
+            ball.dx *= 1.1
+        elif ball.ycor() < -290:
+            ball.sety(-290)
+            ball.dy *= -1
+            ball.dy *= 1.1
+            ball.dx *= 1.1
 
-    if (ball.xcor() > 330 and ball.xcor() < 350) and (ball.ycor() < pad_R.ycor() + 50 and ball.ycor() > pad_R.ycor() -50):
-        ball.setx(330)
-        ball.dx *= -1
-    if (ball.xcor() < -330 and ball.xcor() > -350 ) and (ball.ycor() < pad_L.ycor() + 50 and ball.ycor() > pad_L.ycor() -50):
-        ball.setx(-330)
-        ball.dx *= -1
+        # Check for score
+        if ball.xcor()> 390 or ball.xcor()< -390:
+            if ball.xcor() > 390:
+                left += 1
+            else:
+                right += 1
+            print (str(left) + '   ' + str(right))
+            if left > 4 or right > 4:
+                quit()
+            ball.goto(0,0)
+            ball.dx *= -1
+            if ball.dx > 0:
+                ball.dx = 3
+            else:
+                ball.dx = -3
+            if ball.dy > 0:
+                ball.dy = 3
+            else:
+                ball.dy = -3
 
-    time.sleep(0.02)
+            delay = True
+
+            # check the paddles
+        if (ball.xcor() > 330 and ball.xcor() < 350) and (ball.ycor() < pad_R.ycor() + 50 and ball.ycor() > pad_R.ycor() -50):
+            ball.setx(330)
+            ball.dx *= -1
+        if (ball.xcor() < -330 and ball.xcor() > -350 ) and (ball.ycor() < pad_L.ycor() + 50 and ball.ycor() > pad_L.ycor() -50):
+            ball.setx(-330)
+            ball.dx *= -1
+
+        #time.sleep(0.02)
+
+
+
