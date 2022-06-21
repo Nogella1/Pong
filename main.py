@@ -5,6 +5,7 @@
 import time # time functions
 import turtle  # simple graphics / game engine
 import winsound     # to play sounds
+import random       # to vary things a bit
 
 frame_time = 0.02   # 50 frames per second
 
@@ -12,9 +13,11 @@ frame_time = 0.02   # 50 frames per second
 left = 0
 right = 0
 
-#sounds
+#new stuff
 #winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
 #winsound.PlaySound("ding.wav", winsound.SND_ASYNC)
+#print(random.uniform(0.7, 1.3))
+#quit()
 
 # set up the screen
 wn = turtle.Screen()   # a window for the game
@@ -23,7 +26,7 @@ wn.bgcolor("white")  # black white pink all OK
 wn.setup(width=800, height=600)  # size of window  0,0 is at the centre
 wn.tracer(0)  # stops screen updating itself
 
-# set up the pen
+'''# set up the pen
 pen = turtle.Turtle()
 pen.speed(0)
 pen.color("black")
@@ -31,7 +34,7 @@ pen.penup()
 pen.hideturtle()
 pen.goto(0,260)
 pen.clear()
-pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "normal"))
+pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "normal"))'''
 
 # Left Paddle pad_L
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
@@ -91,7 +94,7 @@ wn.onkeypress(upL, "w")
 wn.onkeypress(downL, "s")
 wn.onkeypress(upR, "Up")
 wn.onkeypress(downR, "Down")
-wn.onkeypress(quit_game, "q")
+#wn.onkeypress(quit_game, "q")
 
 delay = True
 frame = 0
@@ -109,8 +112,8 @@ while True:         # loop until we tell it to stop
             time.sleep(0.5)
             delay = False
             start = time.time()
-        if pad_R.ycor()>350:
-            quit()
+        #if pad_R.ycor()>350:
+            #quit()
         ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
         ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
 
@@ -132,7 +135,8 @@ while True:         # loop until we tell it to stop
                 left += 1
             else:
                 right += 1
-            print (str(left) + '   ' + str(right))
+            #pen.clear()
+            #pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "normal"))
             if left > 4 or right > 4:
                 quit()
             ball.goto(0,0)
