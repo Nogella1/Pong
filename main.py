@@ -45,6 +45,7 @@ pad_L.shapesize(stretch_wid=5, stretch_len=1)  # 5 times as high as it is wide
 pad_L.color("pink")
 pad_L.penup()  # don't want it to draw lines
 pad_L.goto(-350, 0)  # mid screen at the left hand side
+pad_L.dy = 0        # amount to move up or down
 
 # Right Paddle pad_R
 pad_R = turtle.Turtle()  # Turtle is a class of the turtle module
@@ -54,6 +55,7 @@ pad_R.shapesize(stretch_wid=5, stretch_len=1)  # 5 times as high as it is wide
 pad_R.color("black")
 pad_R.penup()  # don't want it to draw lines
 pad_R.goto(350, 0)  # mid screen at the left hand side
+pad_R.dy = 0        # amount to move up or down
 
 # Ball  ball
 ball = turtle.Turtle()  # Turtle is a class of the turtle module
@@ -67,24 +69,49 @@ ball.dy = 3     # ball y-movement each frame
 
 # Paddle Functions
 def upL():
-    y = pad_L.ycor()
-    y += 20
-    pad_L.sety(y)
+    #y = pad_L.ycor()
+    #y += 20
+    #pad_L.sety(y)
+    pad_L.dy = 4
 
 def downL():
-    y = pad_L.ycor()
-    y -= 20
-    pad_L.sety(y)
+    #y = pad_L.ycor()
+    #y -= 20
+    #pad_L.sety(y)
+    pad_L.dy = -4
+
+def stopL_Up():
+    if pad_L.dy > 0:
+        pad_L.dy = 0
+    print("stopL_Up")
+
+def stopL_Down():
+    if pad_L.dy < 0:
+        pad_L.dy = 0
+    print("stopL_Down")
 
 def upR():
-    y = pad_R.ycor()
-    y += 20
-    pad_R.sety(y)
+    #y = pad_R.ycor()
+    #y += 20
+    #pad_R.sety(y)
+    pad_R.dy = 4
 
 def downR():
-    y = pad_R.ycor()
-    y -= 20
-    pad_R.sety(y)
+    #y = pad_R.ycor()
+    #y -= 20
+    #pad_R.sety(y)
+    pad_R.dy = -4
+
+def stopR_Up():
+    if pad_R.dy > 0:
+        pad_R.dy = 0
+    print("stopR_Up")
+
+def stopR_Down():
+    if pad_R.dy < 0:
+        pad_R.dy = 0
+    print("stopR_Down")
+
 
 def quit_game():
     wn.bye()
@@ -95,12 +122,16 @@ def check_border():
         ball.dy *= -1
         ball.dy *= 1.05
         ball.dx *= 1.05
+        pad_R.dy *= 1.05
+        pad_L.dy *= 1.05
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
     elif ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
         ball.dy *= 1.05
         ball.dx *= 1.05
+        pad_R.dy *= 1.05
+        pad_L.dy *= 1.05
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
 
 def check_score():
@@ -146,13 +177,19 @@ def check_paddles():
         ball.setx(-330)
         ball.dx *= -1
         ball.dy *= adjust
-# moving paddles
+
 # Keyboard binding
 wn.listen()
 wn.onkeypress(upL, "w")
 wn.onkeypress(downL, "s")
 wn.onkeypress(upR, "Up")
 wn.onkeypress(downR, "Down")
+
+wn.onkeyrelease(stopR_Up, "Up")      #this moves the Right paddle up when the Arrow (Rt) is released
+wn.onkeyrelease(stopR_Down, "Down")  #this moves the Right paddle up when the Arrow (Rt) is released
+wn.onkeyrelease(stopL_Up, "w")     #this moves the Right paddle up when the Arrow (Rt) is released
+wn.onkeyrelease(stopL_Down, "s")     #this moves the Right paddle up when the Arrow (Rt) is released
+
 wn.onkeypress(quit_game, "q")
 
 if random.randint(0,1) == 0:    # randomise which way the game starts
@@ -181,6 +218,9 @@ while True:         # loop until we tell it to stop
             start = time.time()
         ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
         ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
+
+        pad_R.sety(pad_R.ycor() + pad_R.dy) # move Right paddle
+        pad_L.sety(pad_L.ycor() + pad_L.dy) # move Left paddle
 
         check_border()      # Border checking
         check_score()       # Check for score
