@@ -146,7 +146,7 @@ def check_paddles():
         ball.setx(-330)
         ball.dx *= -1
         ball.dy *= adjust
-
+# moving paddles
 # Keyboard binding
 wn.listen()
 wn.onkeypress(upL, "w")
