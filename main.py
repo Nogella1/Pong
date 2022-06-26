@@ -37,6 +37,8 @@ pen.goto(0,260)
 pen.clear()
 pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "bold"))
 
+# Paddles
+# pad_Move = 3
 # Left Paddle pad_L
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
 pad_L.speed(0)  # this is the fastest possible speed
@@ -46,7 +48,6 @@ pad_L.color("pink")
 pad_L.penup()  # don't want it to draw lines
 pad_L.goto(-350, 0)  # mid screen at the left hand side
 pad_L.dy = 0        # amount to move up or down
-
 # Right Paddle pad_R
 pad_R = turtle.Turtle()  # Turtle is a class of the turtle module
 pad_R.speed(0)  # this is the fastest possible speed
@@ -73,45 +74,37 @@ def upL():
     #y += 20
     #pad_L.sety(y)
     pad_L.dy = 4
-
 def downL():
     #y = pad_L.ycor()
     #y -= 20
     #pad_L.sety(y)
     pad_L.dy = -4
-
 def stopL_Up():
     if pad_L.dy > 0:
         pad_L.dy = 0
     print("stopL_Up")
-
 def stopL_Down():
     if pad_L.dy < 0:
         pad_L.dy = 0
     print("stopL_Down")
-
 def upR():
     #y = pad_R.ycor()
     #y += 20
     #pad_R.sety(y)
     pad_R.dy = 4
-
 def downR():
     #y = pad_R.ycor()
     #y -= 20
     #pad_R.sety(y)
     pad_R.dy = -4
-
 def stopR_Up():
     if pad_R.dy > 0:
         pad_R.dy = 0
     print("stopR_Up")
-
 def stopR_Down():
     if pad_R.dy < 0:
         pad_R.dy = 0
     print("stopR_Down")
-
 
 def quit_game():
     wn.bye()
