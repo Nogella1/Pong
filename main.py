@@ -49,17 +49,17 @@ pad_R.goto(350, 0)  # mid screen at the left hand side
 pad_R.dy = 0        # amount to move up or down
 
 class Ball(turtle.Turtle):
-    def __init__(self):
+    def __init__(self, colour):
         super().__init__()
-        #ball = turtle.Turtle()  # Turtle is a class of the turtle module
         self.speed(0)  # this is the fastest possible speed
         self.shape("circle")
-        self.color("red")
+        self.color(colour)
         self.penup()  # don't want it to draw lines
         self.goto(0, 0)  # mid screen at the left hand side
         self.dx = 3     # ball x-movement each frame
         self.dy = 3     # ball y-movement each frame
-ball = Ball()
+ball = Ball("red")      # red ball is functional
+ball2 = Ball("green")    # green ball is created but doesn't move
 
 '''
 ball = turtle.Turtle()
@@ -208,6 +208,7 @@ while True:         # loop until we tell it to stop
 
         ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
         ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
+        # ball2.setx(ball2.xcor() - 1)      # can move ball2
 
         move_paddles()      # Move the paddles
         check_border()      # Border checking
