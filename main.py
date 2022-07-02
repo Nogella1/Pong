@@ -1,4 +1,3 @@
-
 # https://www.youtube.com/watch?v=C6jJg9Zan7w&ab_channel=freeCodeCamp.org
 # C:\Users\legon\AppData\Local\Programs\Python\Python310\python.exe
 
@@ -7,24 +6,18 @@ import turtle  # simple graphics / game engine
 import winsound     # to play sounds
 import random       # to vary things a bit
 
-frame_time = 0.02   # 50 frames per second
+frame_rate = 50             # 50 fps
+frame_time = 1/frame_rate   # 20 ms
+stop_game = False           # quit
 
-# scores
-left = 0
-right = 0
-
-#new stuff
-#print(time.time())
-#winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
-#winsound.PlaySound("ding.wav", winsound.SND_ASYNC)
-#print(random.uniform(0.7, 1.3))
-#quit()
+left = 0    # Left player score
+right = 0   # Right player score
 
 # set up the screen
 wn = turtle.Screen()   # a window for the game
 wn.title("PONG Game")
-wn.bgcolor("white")  # black white pink all OK
-wn.setup(width=800, height=600)  # size of window  0,0 is at the centre
+wn.bgcolor("purple")  # black white pink all OK
+wn.setup(width=800, height=600, startx= None, starty= 5)  # size of window
 wn.tracer(0)  # stops screen updating itself
 
 # set up the pen
@@ -37,9 +30,6 @@ pen.goto(0,260)
 pen.clear()
 pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "bold"))
 
-# Paddles
-# pad_Move = 3
-# Left Paddle pad_L
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
 pad_L.speed(0)  # this is the fastest possible speed
 pad_L.shape("square")  # will be a rectangle
@@ -70,44 +60,37 @@ ball.dy = 3     # ball y-movement each frame
 
 # Paddle Functions
 def upL():
-    #y = pad_L.ycor()
-    #y += 20
-    #pad_L.sety(y)
-    pad_L.dy = 4
+    pad_L.dy = 6
 def downL():
-    #y = pad_L.ycor()
-    #y -= 20
-    #pad_L.sety(y)
-    pad_L.dy = -4
+    pad_L.dy = -6
 def stopL_Up():
     if pad_L.dy > 0:
         pad_L.dy = 0
-    print("stopL_Up")
 def stopL_Down():
     if pad_L.dy < 0:
         pad_L.dy = 0
-    print("stopL_Down")
 def upR():
-    #y = pad_R.ycor()
-    #y += 20
-    #pad_R.sety(y)
-    pad_R.dy = 4
+    pad_R.dy = 6
 def downR():
-    #y = pad_R.ycor()
-    #y -= 20
-    #pad_R.sety(y)
-    pad_R.dy = -4
+    pad_R.dy = -6
 def stopR_Up():
     if pad_R.dy > 0:
         pad_R.dy = 0
-    print("stopR_Up")
 def stopR_Down():
     if pad_R.dy < 0:
         pad_R.dy = 0
-    print("stopR_Down")
 
 def quit_game():
-    wn.bye()
+    global stop_game
+    stop_game = True
+
+def move_paddles():
+    pad_R.sety(pad_R.ycor() + pad_R.dy)  # move Right paddle
+    if abs(pad_R.ycor()) > 300:
+        pad_R.sety(pad_R.ycor() - pad_R.dy)
+    pad_L.sety(pad_L.ycor() + pad_L.dy)  # move Left paddle
+    if abs(pad_L.ycor()) > 300:
+        pad_L.sety(pad_L.ycor() - pad_L.dy)
 
 def check_border():
     if ball.ycor() > 290:
@@ -128,8 +111,8 @@ def check_border():
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
 
 def check_score():
-    global left
-    global right
+    global left, right, start_up
+
     if ball.xcor() > 390 or ball.xcor() < -390:
         if ball.xcor() > 390:
             left += 1
@@ -158,7 +141,7 @@ def check_score():
         pad_L.sety(0)
         pad_R.sety(0)
 
-        delay = True  # Wait a bit
+        start_up = True  # Wait a bit
 
 def check_paddles():
     adjust = random.uniform(0.8, 1.2)       # random between 0.8 & 1.2 so bounce not predictable
@@ -174,50 +157,52 @@ def check_paddles():
 # Keyboard binding
 wn.listen()
 wn.onkeypress(upL, "w")
+wn.onkeyrelease(stopL_Up, "w")
 wn.onkeypress(downL, "s")
-wn.onkeypress(upR, "Up")
-wn.onkeypress(downR, "Down")
+wn.onkeyrelease(stopL_Down, "s")
 
-wn.onkeyrelease(stopR_Up, "Up")      #this moves the Right paddle up when the Arrow (Rt) is released
-wn.onkeyrelease(stopR_Down, "Down")  #this moves the Right paddle up when the Arrow (Rt) is released
-wn.onkeyrelease(stopL_Up, "w")     #this moves the Right paddle up when the Arrow (Rt) is released
-wn.onkeyrelease(stopL_Down, "s")     #this moves the Right paddle up when the Arrow (Rt) is released
+wn.onkeypress(upR, "Up")
+wn.onkeyrelease(stopR_Up, "Up")
+wn.onkeypress(downR, "Down")
+wn.onkeyrelease(stopR_Down, "Down")
 
 wn.onkeypress(quit_game, "q")
 
-if random.randint(0,1) == 0:    # randomise which way the game starts
+#  *******************************
+
+# Randomise which way the game starts
+if random.randint(0,1) == 0:
     ball.dy *= -1
 if random.randint(0,1) == 0:
     ball.dx *= -1
 
-delay = True        # slight pause before we start
-frame = 0           # seconds so far in this frame
-start = time.time() # number of seconds at start of game  ****
+start_up = True        # slight pause before we start
+frame_so_far = 0           # seconds so far in this frame
+start_time = time.time() # number of seconds at start of game  ****
 
-# Main game loop
+# Main game loop  **************
 while True:         # loop until we tell it to stop
     now = time.time()
-    frame = now - start
+    frame_so_far = now - start_time
 
-    if frame > 0.02:    # new frame starts here
-        start = now
+    if frame_so_far > frame_time:    # new frame starts here
+        start_time = now
         wn.update()    # update the screen
-        if delay:
-            pad_L.sety(0)
-            pad_R.sety(0)
-
+        if start_up:
             time.sleep(0.5)
-            delay = False
-            start = time.time()
+            start_up = False
+            start_time = time.time()
+
         ball.setx(ball.xcor() + ball.dx)    # move the ball by dx
         ball.sety(ball.ycor() + ball.dy)    # move the ball by dy
 
-        pad_R.sety(pad_R.ycor() + pad_R.dy) # move Right paddle
-        pad_L.sety(pad_L.ycor() + pad_L.dy) # move Left paddle
-
+        move_paddles()      # Move the paddles
         check_border()      # Border checking
-        check_score()       # Check for score
+        check_score()       # Check for a score
         check_paddles()     # check the paddles
+
+        if stop_game:
+            break
 
 quit()
 
