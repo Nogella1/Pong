@@ -7,7 +7,7 @@ import winsound     # to play sounds
 import random       # to vary things a bit
 
 frame_rate = 50             # 50 fps
-frame_time = 1/frame_rate   # 20 ms
+frame_time = 1/frame_rate   # 20 msec
 stop_game = False           # quit
 
 left = 0    # Left player score
@@ -31,7 +31,7 @@ pen.clear()
 pen.write(f"{left}  :  {right}",align="center", font=("Arial", 24, "bold"))
 
 pad_L = turtle.Turtle()  # Turtle is a class of the turtle module
-pad_L.speed(0)  # this is the fastest possible speed
+pad_L.speed(0)  #  fastest possible drawing speed
 pad_L.shape("square")  # will be a rectangle
 pad_L.shapesize(stretch_wid=5, stretch_len=1)  # 5 times as high as it is wide
 pad_L.color("pink")
@@ -48,8 +48,21 @@ pad_R.penup()  # don't want it to draw lines
 pad_R.goto(350, 0)  # mid screen at the left hand side
 pad_R.dy = 0        # amount to move up or down
 
-# Ball  ball
-ball = turtle.Turtle()  # Turtle is a class of the turtle module
+class Ball(turtle.Turtle):
+    def __init__(self):
+        super().__init__()
+        #ball = turtle.Turtle()  # Turtle is a class of the turtle module
+        self.speed(0)  # this is the fastest possible speed
+        self.shape("circle")
+        self.color("red")
+        self.penup()  # don't want it to draw lines
+        self.goto(0, 0)  # mid screen at the left hand side
+        self.dx = 3     # ball x-movement each frame
+        self.dy = 3     # ball y-movement each frame
+ball = Ball()
+
+'''
+ball = turtle.Turtle()
 ball.speed(0)  # this is the fastest possible speed
 ball.shape("circle")
 ball.color("red")
@@ -57,7 +70,7 @@ ball.penup()  # don't want it to draw lines
 ball.goto(0, 0)  # mid screen at the left hand side
 ball.dx = 3     # ball x-movement each frame
 ball.dy = 3     # ball y-movement each frame
-
+'''
 # Paddle Functions
 def upL():
     pad_L.dy = 6
